@@ -17,7 +17,7 @@ Membangun control plane Python yang ringan, mudah dipasang, dan efektif untuk me
 | Audit | Event append-only | **Selesai minimum** |
 | Reliability | Recovery, retry, idempotency | **Selesai Fase 1** |
 | Security | Authentication, authorization, secret isolation | **Selesai v0.4** |
-| UX | Dashboard web dan monitoring | **Belum** |
+| UX | Dashboard web dan monitoring | **Selesai v0.5 dasar** |
 
 ## Tahapan kerja
 
@@ -64,10 +64,11 @@ Membangun control plane Python yang ringan, mudah dipasang, dan efektif untuk me
 
 ### Fase 4 — Dashboard dan operasional
 
-- [ ] Dashboard status company, agent, task, budget
-- [ ] Live run log dan heartbeat timeline
+- [x] Dashboard status company, agent, task, budget
+- [x] Audit stream dan auto-refresh monitoring dasar
+- [x] Health/readiness metrics JSON
+- [ ] Live run log dan heartbeat timeline detail
 - [ ] Webhook/event notification
-- [ ] Health/readiness metrics
 - [ ] Backup dan restore SQLite
 - [ ] Docker image dan deployment guide
 

@@ -26,6 +26,7 @@ Roadmap ini membedakan fitur yang sudah tersedia dari pekerjaan yang belum dimul
 - **Real adapters v0.3:** subprocess non-shell, HTTP/webhook, OpenAI-compatible, bounded timeout, dan konfigurasi agent telah selesai.
 - **Fase 1 domain hygiene:** validasi relasi, pagination/filtering, detail endpoint, migration runner, dead-letter queue, dan graceful worker draining telah selesai.
 - **Secure control plane v0.4:** auth API key secure-by-default, RBAC company scope, approval gate, agent lifecycle, dan secret redaction telah selesai.
+- **Operator dashboard v0.5:** dashboard HTML responsif, task monitor, audit stream, auto-refresh, dan metrics endpoint telah selesai sebagai baseline ringan.
 
 ## Fondasi tersedia, tetapi belum production-ready
 
@@ -64,18 +65,18 @@ Roadmap ini membedakan fitur yang sudah tersedia dari pekerjaan yang belum dimul
 
 ### Produk dan operasi
 
-- Dashboard web
-- Live logs
+- Dashboard web — **selesai dasar di v0.5**
+- Live logs — **belum; audit stream tersedia**
 - Multi-user support
 - Export/import company
 - Backup/restore
 - Docker image
-- Metrics, tracing, dan alerting
+- Metrics, tracing, dan alerting — **metrics dasar selesai; tracing/alerting belum**
 
 ## Urutan milestone berikutnya
 
 1. **v0.2 — Reliable queue:** lease, retry, idempotency, recovery test — **selesai**.
 2. **v0.3 — Real adapters:** subprocess dan HTTP adapter dengan timeout serta OpenAI-compatible endpoint — **selesai**.
 3. **v0.4 — Secure control plane:** authentication, RBAC, secret handling, approval — **selesai**.
-4. **v0.5 — Operator dashboard:** monitoring company, agent, task, budget, dan audit — **berikutnya**.
+4. **v0.5 — Operator dashboard:** monitoring company, agent, task, budget, dan audit — **selesai dasar**.
 5. **v1.0 — Production baseline:** migration, backup/restore, deployment, metrics, security review, dan dokumentasi operasional.

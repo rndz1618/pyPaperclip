@@ -11,6 +11,7 @@ from typing import Any
 
 from fastapi import FastAPI, HTTPException, Query, Request
 from .adapters import AgentAdapter, EchoAdapter, HttpAdapter, OpenAICompatibleAdapter, SubprocessAdapter
+from .dashboard import DASHBOARD_HTML
 from .migrations import MigrationRunner
 from .models import AgentIn, CompanyIn, GoalIn, TaskIn
 from .models import ApiKeyIn
@@ -233,7 +234,7 @@ async def lifespan(_: FastAPI):
     store.close()
 
 
-app = FastAPI(title="pyPaperclip", version="0.4.0", lifespan=lifespan)
+app = FastAPI(title="pyPaperclip", version="0.5.0", lifespan=lifespan)
 
 def auth_required() -> bool:
     return os.getenv("PYPAPERCLIP_AUTH_REQUIRED", "1") == "1"
@@ -267,7 +268,7 @@ def target_company_id(path: str) -> str | None:
 
 @app.middleware("http")
 async def security_middleware(request: Request, call_next):
-    if not auth_required() or request.url.path in {"/health", "/docs", "/openapi.json", "/redoc"}:
+    if not auth_required() or request.url.path in {"/health", "/dashboard", "/docs", "/openapi.json", "/redoc"}:
         return await call_next(request)
     try:
         principal = principal_from_request(request)
@@ -294,6 +295,23 @@ async def security_middleware(request: Request, call_next):
 @app.get("/health")
 def health() -> dict[str, Any]:
     return {"status": "ok", "service": "pyPaperclip"}
+
+@app.get("/dashboard", include_in_schema=False)
+def dashboard() -> Any:
+    from fastapi.responses import HTMLResponse
+    return HTMLResponse(DASHBOARD_HTML)
+
+@app.get("/metrics")
+def metrics() -> dict[str, Any]:
+    rows = store.many("SELECT status, COUNT(*) AS count FROM tasks GROUP BY status")
+    counts = {row["status"]: row["count"] for row in rows}
+    return {
+        "companies": store.one("SELECT COUNT(*) AS count FROM companies")["count"],
+        "agents": store.one("SELECT COUNT(*) AS count FROM agents")["count"],
+        "active_agents": store.one("SELECT COUNT(*) AS count FROM agents WHERE status='active'")["count"],
+        "tasks": counts,
+        "audit_events": store.one("SELECT COUNT(*) AS count FROM audit_log")["count"],
+    }
 
 @app.post("/companies")
 def create_company(body: CompanyIn) -> dict[str, Any]:

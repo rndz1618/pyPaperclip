@@ -2,7 +2,7 @@
 
 **pyPaperclip** adalah control plane Python ringan untuk mengatur pekerjaan agen AI. Fokusnya adalah koordinasi yang dapat diaudit—company, goal, agent, task, heartbeat, budget, dan audit log—bukan chatbot atau framework model.
 
-> Status saat ini: **Fase 1 dan v0.4 Secure Control Plane selesai**. Roadmap detail tersedia di [ROADMAP.md](ROADMAP.md), sedangkan rencana teknis tersedia di [PLAN.md](PLAN.md).
+> Status saat ini: **Fase 1, v0.4 Secure Control Plane, dan v0.5 Operator Dashboard selesai**. Roadmap detail tersedia di [ROADMAP.md](ROADMAP.md), sedangkan rencana teknis tersedia di [PLAN.md](PLAN.md).
 
 ## Mengapa pyPaperclip lebih ringan
 
@@ -21,6 +21,7 @@ Upstream Paperclip menggabungkan Node.js, React, PostgreSQL/Drizzle, banyak adap
 | Reliable queue | **Selesai v0.2** | Lease, retry/backoff, idempotency, dan recovery |
 | Real adapters | **Selesai v0.3** | Subprocess non-shell, HTTP/webhook, dan OpenAI-compatible |
 | Secure control plane | **Selesai v0.4** | API key, RBAC, approval gate, lifecycle agent, secret redaction |
+| Operator dashboard | **Selesai v0.5** | Dashboard HTML responsif, task monitor, audit stream, dan metrics |
 | Fase 1 domain hygiene | **Selesai** | Validasi relasi, pagination, detail endpoint, migration runner, DLQ, graceful drain |
 | Auth multi-user | **Belum** | Direncanakan fase berikutnya |
 | UI dashboard | **Belum** | Direncanakan setelah API stabil |
@@ -84,6 +85,10 @@ curl -X POST localhost:8000/api-keys \
 ```
 
 Role yang tersedia adalah `owner`, `admin`, `operator`, dan `viewer`. API key dapat dibatasi ke satu company melalui `company_id`. Task yang dibuat dengan `approval_required: true` berhenti pada status `pending_approval` hingga disetujui role owner/admin. Agent mendukung `/pause`, `/resume`, dan `/terminate`; secret pada config, result, dan audit otomatis diredaksi.
+
+## Operator dashboard
+
+Buka `http://127.0.0.1:8000/dashboard` setelah server berjalan. Dashboard memakai API key yang ditempel di browser, menyimpan key hanya di `localStorage`, memuat ringkasan company/agent/task, menampilkan task terbaru dan audit stream, serta refresh otomatis setiap 30 detik. Endpoint metrics JSON tersedia di `/metrics` dan tetap dilindungi authentication.
 
 ## Pengujian
 
