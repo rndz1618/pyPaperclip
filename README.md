@@ -2,7 +2,7 @@
 
 **pyPaperclip** adalah control plane Python ringan untuk mengatur pekerjaan agen AI. Fokusnya adalah koordinasi yang dapat diaudit—company, goal, agent, task, heartbeat, budget, dan audit log—bukan chatbot atau framework model.
 
-> Status saat ini: **Fase 1 selesai dan v0.3 Real Adapters selesai**. Roadmap detail tersedia di [ROADMAP.md](ROADMAP.md), sedangkan rencana teknis tersedia di [PLAN.md](PLAN.md).
+> Status saat ini: **Fase 1 dan v0.4 Secure Control Plane selesai**. Roadmap detail tersedia di [ROADMAP.md](ROADMAP.md), sedangkan rencana teknis tersedia di [PLAN.md](PLAN.md).
 
 ## Mengapa pyPaperclip lebih ringan
 
@@ -20,6 +20,7 @@ Upstream Paperclip menggabungkan Node.js, React, PostgreSQL/Drizzle, banyak adap
 | Governance | **Selesai minimum** | Audit log append-only |
 | Reliable queue | **Selesai v0.2** | Lease, retry/backoff, idempotency, dan recovery |
 | Real adapters | **Selesai v0.3** | Subprocess non-shell, HTTP/webhook, dan OpenAI-compatible |
+| Secure control plane | **Selesai v0.4** | API key, RBAC, approval gate, lifecycle agent, secret redaction |
 | Fase 1 domain hygiene | **Selesai** | Validasi relasi, pagination, detail endpoint, migration runner, DLQ, graceful drain |
 | Auth multi-user | **Belum** | Direncanakan fase berikutnya |
 | UI dashboard | **Belum** | Direncanakan setelah API stabil |
@@ -70,6 +71,19 @@ Agent menerima `config` JSON saat dibuat. Adapter `subprocess` hanya aktif jika 
 Adapter `http` mengirim payload task ke `config.url` melalui POST JSON dengan timeout terbatas. Header tambahan dapat diberikan melalui `config.headers`; jangan menaruh secret langsung di database jika dapat dihindari.
 
 Adapter `openai` memanggil endpoint OpenAI-compatible `/chat/completions`. Konfigurasinya membutuhkan `config.base_url`, `config.model`, dan opsional `config.api_key_env` yang menunjuk ke nama environment variable. Nilai API key tidak pernah disimpan dalam konfigurasi agent atau audit log.
+
+## Secure control plane
+
+Authentication aktif secara default. Buat API key pertama menggunakan bootstrap token, lalu gunakan header `X-API-Key` atau `Authorization: Bearer <key>` pada request berikutnya:
+
+```bash
+PYPAPERCLIP_BOOTSTRAP_TOKEN='change-me' pypaperclip
+curl -X POST localhost:8000/api-keys \
+  -H 'x-api-key: change-me' -H 'content-type: application/json' \
+  -d '{"name":"admin","role":"owner"}'
+```
+
+Role yang tersedia adalah `owner`, `admin`, `operator`, dan `viewer`. API key dapat dibatasi ke satu company melalui `company_id`. Task yang dibuat dengan `approval_required: true` berhenti pada status `pending_approval` hingga disetujui role owner/admin. Agent mendukung `/pause`, `/resume`, dan `/terminate`; secret pada config, result, dan audit otomatis diredaksi.
 
 ## Pengujian
 

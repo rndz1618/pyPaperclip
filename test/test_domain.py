@@ -10,6 +10,7 @@ class PyPaperclipDomainTest(unittest.TestCase):
     def test_validation_pagination_details_and_dead_letter(self):
         with tempfile.TemporaryDirectory() as directory:
             os.environ["PYPAPERCLIP_DB"] = os.path.join(directory, "domain.db")
+            os.environ["PYPAPERCLIP_AUTH_REQUIRED"] = "0"
             import pypaperclip.app as module
             module = importlib.reload(module)
             with TestClient(module.app) as client:
@@ -39,7 +40,7 @@ class PyPaperclipDomainTest(unittest.TestCase):
                 self.assertEqual(dead["items"][0]["task_id"], no_agent["id"])
                 self.assertEqual(client.get(f"/companies/{first['id']}").json()["name"], "One")
                 versions = module.store.many("SELECT version FROM schema_migrations ORDER BY version")
-                self.assertEqual([row["version"] for row in versions], [1, 2, 3])
+                self.assertEqual([row["version"] for row in versions], [1, 2, 3, 4])
 
 
 if __name__ == "__main__":

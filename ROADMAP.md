@@ -25,6 +25,7 @@ Roadmap ini membedakan fitur yang sudah tersedia dari pekerjaan yang belum dimul
 - **Reliable queue v0.2:** lease timeout, retry/backoff, idempotency key, dan recovery test telah selesai.
 - **Real adapters v0.3:** subprocess non-shell, HTTP/webhook, OpenAI-compatible, bounded timeout, dan konfigurasi agent telah selesai.
 - **Fase 1 domain hygiene:** validasi relasi, pagination/filtering, detail endpoint, migration runner, dead-letter queue, dan graceful worker draining telah selesai.
+- **Secure control plane v0.4:** auth API key secure-by-default, RBAC company scope, approval gate, agent lifecycle, dan secret redaction telah selesai.
 
 ## Fondasi tersedia, tetapi belum production-ready
 
@@ -47,11 +48,11 @@ Roadmap ini membedakan fitur yang sudah tersedia dari pekerjaan yang belum dimul
 
 ### Security dan governance
 
-- Authentication dan API keys
-- RBAC company/agent
-- Secret vault dan secret redaction menyeluruh
-- Approval gates
-- Agent pause/resume/terminate
+- Authentication dan API keys — **selesai di v0.4**
+- RBAC company/agent — **selesai di v0.4**
+- Secret vault dan secret redaction menyeluruh — **redaction selesai; vault belum**
+- Approval gates — **selesai di v0.4**
+- Agent pause/resume/terminate — **selesai di v0.4**
 
 ### Adapter dan integrasi
 
@@ -75,6 +76,6 @@ Roadmap ini membedakan fitur yang sudah tersedia dari pekerjaan yang belum dimul
 
 1. **v0.2 — Reliable queue:** lease, retry, idempotency, recovery test — **selesai**.
 2. **v0.3 — Real adapters:** subprocess dan HTTP adapter dengan timeout serta OpenAI-compatible endpoint — **selesai**.
-3. **v0.4 — Secure control plane:** authentication, RBAC, secret handling, approval — **berikutnya**.
-4. **v0.5 — Operator dashboard:** monitoring company, agent, task, budget, dan audit.
+3. **v0.4 — Secure control plane:** authentication, RBAC, secret handling, approval — **selesai**.
+4. **v0.5 — Operator dashboard:** monitoring company, agent, task, budget, dan audit — **berikutnya**.
 5. **v1.0 — Production baseline:** migration, backup/restore, deployment, metrics, security review, dan dokumentasi operasional.

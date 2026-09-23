@@ -21,6 +21,7 @@ class FlakyAdapter:
 class PyPaperclipSmokeTest(unittest.TestCase):
     def load_module(self, directory):
         os.environ["PYPAPERCLIP_DB"] = os.path.join(directory, "test.db")
+        os.environ["PYPAPERCLIP_AUTH_REQUIRED"] = "0"
         import pypaperclip.app as module
         return importlib.reload(module)
 

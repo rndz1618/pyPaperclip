@@ -16,7 +16,7 @@ Membangun control plane Python yang ringan, mudah dipasang, dan efektif untuk me
 | Pengendalian biaya | Company budget dan spend counter | **Selesai MVP** |
 | Audit | Event append-only | **Selesai minimum** |
 | Reliability | Recovery, retry, idempotency | **Selesai Fase 1** |
-| Security | Authentication, authorization, secret isolation | **Belum** |
+| Security | Authentication, authorization, secret isolation | **Selesai v0.4** |
 | UX | Dashboard web dan monitoring | **Belum** |
 
 ## Tahapan kerja
@@ -55,10 +55,10 @@ Membangun control plane Python yang ringan, mudah dipasang, dan efektif untuk me
 
 ### Fase 3 — Governance dan security
 
-- [ ] API key authentication
-- [ ] Role-based access control
-- [ ] Approval gate untuk task berisiko
-- [ ] Pause/resume/terminate agent
+- [x] API key authentication dengan hashing dan bootstrap token
+- [x] Role-based access control dengan company scope
+- [x] Approval gate untuk task berisiko
+- [x] Pause/resume/terminate agent
 - [ ] Audit event schema versioning
 - [ ] Export/import company dengan secret scrubbing
 

@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pypaperclip"
-version = "0.3.1"
+version = "0.4.0"
 description = "pyPaperclip: lightweight Python orchestration control plane for AI agents"
 requires-python = ">=3.11"
 dependencies = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "pydantic>=2.0"]

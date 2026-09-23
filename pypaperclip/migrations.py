@@ -17,6 +17,7 @@ class MigrationRunner:
             (1, self._migration_reliability_columns),
             (2, self._migration_agent_config),
             (3, self._migration_dead_letter_queue),
+            (4, self._migration_security),
         ]
         applied_count = 0
         for version, migration in migrations:
@@ -61,3 +62,22 @@ class MigrationRunner:
         );
         CREATE INDEX IF NOT EXISTS idx_dead_letter_company ON dead_letter_tasks(company_id, created_at DESC);
         """)
+
+    def _migration_security(self) -> None:
+        self.conn.executescript("""
+        CREATE TABLE IF NOT EXISTS api_keys (
+            id TEXT PRIMARY KEY, name TEXT NOT NULL, key_hash TEXT NOT NULL UNIQUE,
+            role TEXT NOT NULL, company_id TEXT REFERENCES companies(id) ON DELETE CASCADE,
+            enabled INTEGER NOT NULL DEFAULT 1, created_at TEXT NOT NULL, last_used_at TEXT
+        );
+        CREATE TABLE IF NOT EXISTS task_approvals (
+            task_id TEXT PRIMARY KEY REFERENCES tasks(id) ON DELETE CASCADE,
+            required INTEGER NOT NULL DEFAULT 0, approved_by TEXT, approved_at TEXT
+        );
+        """)
+        task_columns = {row[1] for row in self.conn.execute("PRAGMA table_info(tasks)")}
+        if "approval_required" not in task_columns:
+            self.conn.execute("ALTER TABLE tasks ADD COLUMN approval_required INTEGER NOT NULL DEFAULT 0")
+        agent_columns = {row[1] for row in self.conn.execute("PRAGMA table_info(agents)")}
+        if "status" not in agent_columns:
+            self.conn.execute("ALTER TABLE agents ADD COLUMN status TEXT NOT NULL DEFAULT 'active'")

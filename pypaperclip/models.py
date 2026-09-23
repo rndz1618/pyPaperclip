@@ -30,3 +30,10 @@ class TaskIn(BaseModel):
     priority: int = Field(default=100, ge=0)
     idempotency_key: str | None = Field(default=None, min_length=1, max_length=128)
     max_attempts: int = Field(default=3, ge=1, le=10)
+    approval_required: bool = False
+
+
+class ApiKeyIn(BaseModel):
+    name: str = Field(min_length=1, max_length=100)
+    role: str = "viewer"
+    company_id: str | None = None
